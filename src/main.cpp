@@ -978,20 +978,22 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 {
     int64 nRewardCoinYear;
 
-	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
+    // Adjust the annual PoS reward to 5.95%
+    nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE * 5.95 / 100;
 
-    if(bCoinYearOnly)
-            return nRewardCoinYear;
+    if (bCoinYearOnly)
+        return nRewardCoinYear;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
-    if(nTime > REWARD_SWITCH_TIME)
-		nSubsidy /= 100;
+    if (nTime > REWARD_SWITCH_TIME)
+        nSubsidy /= 100;
 
-	// printf("nSubsidy=%"PRI64d", nCoinAge=%"PRI64d", nRewardCoinYear=%"PRI64d", \n", nSubsidy, nCoinAge, nRewardCoinYear);
+    // printf("nSubsidy=%"PRI64d", nCoinAge=%"PRI64d", nRewardCoinYear=%"PRI64d", \n", nSubsidy, nCoinAge, nRewardCoinYear);
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
     return nSubsidy;
 }
+
 
 static const int64 nTargetTimespan = 30 * 60;	// 30 mins
 static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; 
